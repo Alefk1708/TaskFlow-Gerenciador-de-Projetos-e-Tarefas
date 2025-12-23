@@ -14,7 +14,7 @@ from core.security import get_current_user, create_access_token, hash_password, 
 from models.models import User, TwoFactorAuth
 from schemas.schema import UserCreate, UserBase, TwoFactorAuth1
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 SMTP_EMAIL = os.getenv("SMTP_EMAIL")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")

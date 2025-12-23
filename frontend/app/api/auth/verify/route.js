@@ -27,7 +27,7 @@ export async function POST(request) {
     }
 
     // Chamada ao backend
-    const res = await fetch(`${BACKEND_URL}/verify`, {
+    const res = await fetch(`${BACKEND_URL}/auth/verify`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

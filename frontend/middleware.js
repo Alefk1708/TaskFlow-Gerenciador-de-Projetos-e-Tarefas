@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
 import { jwtDecode } from "jwt-decode"
+import { cookies } from "next/headers"
 
-export function middleware(request) {
+export async function middleware(request) {
   const { pathname } = request.nextUrl
+  const cookiesStore = await cookies()
 
   const PUBLIC_ROUTES = ["/login", "/register"]
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
@@ -39,6 +41,8 @@ export function middleware(request) {
       const decoded = jwtDecode(jwt)
 
       if (decoded.exp * 1000 < Date.now()) {
+        cookiesStore.delete("token")
+        cookiesStore.delete("email")
         return NextResponse.redirect(new URL("/login", request.url))
       }
 
@@ -48,9 +52,6 @@ export function middleware(request) {
     }
   }
 
-  /**
-   * 🔹 USUÁRIO NÃO LOGADO
-   */
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url))
   }

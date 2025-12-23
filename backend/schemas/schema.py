@@ -1,21 +1,25 @@
 from pydantic import BaseModel, Field, ConfigDict
 from uuid import UUID, uuid4
-import uuid
 
+
+# Base sem senha
 class UserBase(BaseModel):
     email: str
     password: str
-    
+
     model_config = ConfigDict(from_attributes=True)
-    
-class UserCreate(UserBase):
-    id: UUID = Field(default_factory=lambda: str(uuid4()))
+
+# Entrada (criação)
+class UserCreate(BaseModel):
+    email: str
     name: str
-    pass
+    password: str
 
-class User(UserBase):
-    pass
+# Saída (resposta da API)
+class UserOut(UserBase):
+    id: UUID
 
+# 2FA
 class TwoFactorAuth1(BaseModel):
     email: str
     code: str

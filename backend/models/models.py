@@ -1,6 +1,7 @@
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey
 from datetime import datetime
 from database import Base
+import uuid
 
 
 class User(Base):
@@ -21,3 +22,14 @@ class TwoFactorAuth(Base):
     code = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     expires_at = Column(DateTime, nullable=False)
+
+class Tarefa(Base):
+    __tablename__ = "tarefas"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String, nullable=False)
+    descricao = Column(String, nullable=False)
+    priority = Column(String, nullable=False)
+    done = Column(Boolean, default=False, nullable=False)
+    date = Column(DateTime, default=datetime.utcnow, nullable=False)

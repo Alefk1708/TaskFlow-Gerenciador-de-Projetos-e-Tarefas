@@ -3,9 +3,12 @@
 import { LogOut } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { getUserFromToken } from "@/lib/auth/user";
+import { useEffect, useState } from "react";
 
 export default function TopBar() {
   const router = useRouter();
+  const [user, setUser] = useState([])
 
   async function logOut() {
     const res = await fetch("/api/auth/logout", {
@@ -17,6 +20,23 @@ export default function TopBar() {
       router.push("/login");
     }
   }
+
+  useEffect(() => {
+    async function pegarUsuario() {
+      try {
+        const res = await fetch('/api/auth/me', {
+          cache: 'no-store'
+
+        })
+
+        const data = await res.json()
+        setUser(data)
+      } catch {
+        return null
+      }
+    }
+    pegarUsuario()
+  },[])
 
   return (
     <header
@@ -52,10 +72,10 @@ export default function TopBar() {
               text-[4vh] font-semibold
             "
           >
-            U
+            {user?.name ? user?.name?.charAt(0).toUpperCase() : "U"}
           </span>
 
-          <p className="text-[1.4vw] font-medium text-slate-700">User</p>
+          <p className="text-[1.4vw] font-medium text-slate-700">{user.name ? user?.name : "Usuário"}</p>
         </div>
 
         {/* Logout */}

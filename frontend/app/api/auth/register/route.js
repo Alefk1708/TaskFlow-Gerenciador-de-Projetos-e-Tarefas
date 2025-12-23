@@ -10,7 +10,7 @@ export async function POST(request) {
             return NextResponse.json({"message": "Email e senha são obrigatoris"})
         }
 
-        const res = await fetch(`${BACKEND_URL}/register`, {
+        const res = await fetch(`${BACKEND_URL}/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
