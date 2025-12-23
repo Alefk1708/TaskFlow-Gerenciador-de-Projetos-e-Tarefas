@@ -123,13 +123,13 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex items-center gap-[3vw]">
-              <span className="text-[1.1vw] text-slate-500">{task.date}</span>
+              <span className="text-[1.1vw] text-slate-500">{task.date.slice(0, 10)}</span>
 
               <div className="flex items-center gap-[0.6vw]">
                 <span
-                  className={`w-[1vh] h-[1vh] rounded-full ${task.color}`}
+                  className={`w-[1vh] h-[1vh] rounded-full ${task.priority === "baixa" ? "bg-green-600" : task.priority === "media" ? "bg-yellow-600" : "bg-red-600"}`}
                 />
-                <span className="text-[1.2vw]">{task.priority}</span>
+                <span className="text-[1.2vw]">{task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</span>
               </div>
             </div>
           </div>
