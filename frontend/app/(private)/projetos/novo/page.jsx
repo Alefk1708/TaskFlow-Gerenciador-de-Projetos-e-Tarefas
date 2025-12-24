@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // 1. Importar useRouter
-import { ArrowLeft } from "lucide-react";    // 2. Importar o ícone
+import { useRouter } from "next/navigation"; 
+import { ArrowLeft } from "lucide-react";  
 
 export default function NovoProjetoPage() {
-  const router = useRouter(); // 3. Inicializar o router
+  const router = useRouter(); 
   
   const [title, setTitle] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -48,9 +48,6 @@ export default function NovoProjetoPage() {
         setTitle("");
         setDescricao("");
         setPriority("");
-        
-        // Opcional: Voltar automaticamente após criar
-        // setTimeout(() => router.back(), 1000);
       }
     } catch (error) {
       console.log(error);
