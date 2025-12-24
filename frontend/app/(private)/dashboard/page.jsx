@@ -4,24 +4,49 @@ import { Layers, ClipboardList, CheckSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
-  const [list, setList] = useState([])
-  
+  const [list, setList] = useState([]);
 
-  useEffect(() => {
-  async function fetchTasks() {
+ async function updateTaks(done, id) {
+    setList((prevList) =>
+      prevList.map((task) =>
+        task.id === id ? { ...task, done: done } : task
+      )
+    );
+
     try {
-      const response = await fetch('/api/task/list');
+      const response = await fetch("/api/task/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          done: done,
+          id: id,
+        }),
+      });
+      
       const data = await response.json();
-      setList(data);
-      console.log(data)
+      console.log("Sucesso:", data);
+      
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao atualizar:", error);
     }
   }
 
-  fetchTasks();
-}, []);
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const response = await fetch("/api/task/list");
+        const data = await response.json();
+        setList(data);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
+    fetchTasks();
+  }, []);
 
   const stats = [
     {
@@ -108,7 +133,8 @@ export default function DashboardPage() {
             <div className="flex items-center gap-[1vw]">
               <input
                 type="checkbox"
-                defaultChecked={task.done}
+                checked={task.done}
+                onChange={() => updateTaks(!task.done, task.id)}
                 className="size-[1.2vw]"
               />
 
@@ -123,13 +149,24 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex items-center gap-[3vw]">
-              <span className="text-[1.1vw] text-slate-500">{task.date.slice(0, 10)}</span>
+              <span className="text-[1.1vw] text-slate-500">
+                {task.date.slice(0, 10)}
+              </span>
 
               <div className="flex items-center gap-[0.6vw]">
                 <span
-                  className={`w-[1vh] h-[1vh] rounded-full ${task.priority === "baixa" ? "bg-green-600" : task.priority === "media" ? "bg-yellow-600" : "bg-red-600"}`}
+                  className={`w-[1vh] h-[1vh] rounded-full ${
+                    task.priority === "baixa"
+                      ? "bg-green-600"
+                      : task.priority === "media"
+                      ? "bg-yellow-600"
+                      : "bg-red-600"
+                  }`}
                 />
-                <span className="text-[1.2vw]">{task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}</span>
+                <span className="text-[1.2vw]">
+                  {task.priority.charAt(0).toUpperCase() +
+                    task.priority.slice(1)}
+                </span>
               </div>
             </div>
           </div>

@@ -1,14 +1,29 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // 1. Importar useRouter
+import { ArrowLeft } from "lucide-react";    // 2. Importar o ícone
 
 export default function NovoProjetoPage() {
+  const router = useRouter(); // 3. Inicializar o router
+  
   const [title, setTitle] = useState("");
   const [descricao, setDescricao] = useState("");
   const [priority, setPriority] = useState("");
   const [erro, setErro] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const priorityOptions = [
+    { value: "baixa", label: "Baixa", color: "bg-green-600" },
+    { value: "media", label: "Média", color: "bg-yellow-500" },
+    { value: "alta", label: "Alta", color: "bg-red-600" },
+  ];
 
   async function handleSubmit() {
+    setLoading(true);
+    setErro("");
+    setSuccess("");
+
     try {
       const response = await fetch("/api/task/create", {
         method: "POST",
@@ -27,34 +42,48 @@ export default function NovoProjetoPage() {
 
       if (!response.ok) {
         setErro("Erro ao criar projeto");
-        setSuccess("");
         console.log(data);
       } else {
         setSuccess("Projeto criado com sucesso!");
-        setErro("");
         setTitle("");
         setDescricao("");
         setPriority("");
+        
+        // Opcional: Voltar automaticamente após criar
+        // setTimeout(() => router.back(), 1000);
       }
-
-      return data;
     } catch (error) {
       console.log(error);
       setErro("Erro ao comunicar com a api");
-      setSuccess("");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="w-full h-full">
-      <div className=" w-full h-[9vh]  flex flex-row justify-between items-center px-[2vw] ">
-        <h1 className="text-[2vw] text-slate-600 font-semibold ">
+    <div className="w-full h-full flex flex-col p-[2vw]">
+      
+      {/* 4. CABEÇALHO COM BOTÃO DE VOLTAR */}
+      <div className="w-full h-[8vh] flex items-center gap-[1vw] mb-[1vh]">
+        <button 
+          onClick={() => router.back()} 
+          className="text-slate-400 hover:text-slate-600 transition-colors"
+          title="Voltar"
+        >
+          <ArrowLeft className="w-[2vw] h-[2vw]" />
+        </button>
+
+        <h1 className="text-[2vw] text-slate-600 font-semibold">
           Novo projeto
         </h1>
       </div>
+
       <form
-        action="/POST"
-        className="w-[77%] h-[90%] px-[2vw] flex flex-col gap-[1.5vh]"
+        className="
+          w-full h-full 
+          flex flex-col gap-[1.5vh] 
+          bg-white rounded-[1vh] p-[2vw] shadow-sm
+        "
         onSubmit={(e) => {
           e.preventDefault();
           if (!title || !descricao || !priority) {
@@ -62,55 +91,103 @@ export default function NovoProjetoPage() {
             setSuccess("");
             return;
           }
-
           handleSubmit();
         }}
       >
-        <p className="text-[1.4vw] ">Titulo</p>
-        <input
-          type="text"
-          name="titulo"
-          placeholder="Digite o titulo do projeto..."
-          className="w-full h-[5vh] text-[1.2vw] border-[0.2vh] border-slate-400 rounded-[0.8vh] px-[0.5vw] outline-none "
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <p>Descrição</p>
-        <textarea
-          type="text"
-          name="titulo"
-          placeholder="Digite a descrição do projeto..."
-          className="w-full h-[18vh] text-[1.2vw] border-[0.2vh] border-slate-400 rounded-[0.8vh] px-[0.5vw] outline-none resize-none "
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          required
-        />
-        <p>Prioridade</p>
-        <select
-          name="priority"
-          className="w-full h-[5vh] text-[1.2vw] border-[0.2vh] border-slate-400 rounded-[0.8vh] px-[0.5vw] outline-none"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          required
-        >
-          <option disabled selected></option>
-          <option value={"baixa"}>Baixa</option>
-          <option value="media">Média</option>
-          <option value="alta">Alta</option>
-        </select>
-
-        <button
-          className="
-          w-[10vw] h-[6vh] bg-blue-600 text-white rounded-[0.8vh] text-[1.2vw] font-medium hover:bg-blue-700 transition-colors ml-auto mr-auto
-        "
-        >
-          Criar Projeto
-        </button>
-        <div className="text-[1.1vw] w-full h-[5vh] text-center ">
-          <p className="text-red-600">{erro}</p>
-          <p className="text-green-600">{success}</p>
+        {/* Input Título */}
+        <div className="flex flex-col gap-[0.5vh]">
+          <p className="text-[1.1vw] text-slate-600 font-medium">Título</p>
+          <input
+            type="text"
+            placeholder="Digite o titulo do projeto..."
+            className="
+              w-full h-[6vh] 
+              text-[1.1vw] 
+              border-[0.2vh] border-slate-300 
+              rounded-[0.8vh] 
+              px-[1vw] 
+              outline-none focus:border-blue-500 transition-colors
+            "
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
         </div>
+
+        {/* Textarea Descrição */}
+        <div className="flex flex-col gap-[0.5vh] flex-1">
+          <p className="text-[1.1vw] text-slate-600 font-medium">Descrição</p>
+          <textarea
+            placeholder="Digite a descrição do projeto..."
+            className="
+              w-full flex-1 
+              text-[1.1vw] 
+              border-[0.2vh] border-slate-300 
+              rounded-[0.8vh] 
+              p-[1vw] 
+              outline-none resize-none focus:border-blue-500 transition-colors
+            "
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* Seleção de Prioridade */}
+        <div className="flex flex-col gap-[0.5vh]">
+          <p className="text-[1.1vw] text-slate-600 font-medium">Prioridade</p>
+          
+          <div className="flex gap-[1vw] w-full h-[6vh]">
+            {priorityOptions.map((option) => {
+              const isSelected = priority === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setPriority(option.value)}
+                  className={`
+                    flex-1 
+                    rounded-[0.8vh] 
+                    text-[1.1vw] font-semibold 
+                    transition-all 
+                    flex items-center justify-center gap-[0.5vw]
+                    border-[0.2vh]
+                    ${isSelected 
+                      ? `${option.color} border-transparent text-white shadow-md` 
+                      : "bg-white border-slate-300 text-slate-500 hover:bg-slate-50"
+                    }
+                  `}
+                >
+                  <div className={`w-[0.8vw] h-[0.8vw] rounded-full ${isSelected ? "bg-white" : option.color}`} />
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Botão Salvar */}
+        <div className="flex flex-col items-center gap-[1vh] mt-[1vh]">
+          <div className="h-[3vh] text-[1vw] font-medium">
+             {erro && <p className="text-red-600">{erro}</p>}
+             {success && <p className="text-green-600">{success}</p>}
+          </div>
+
+          <button
+            disabled={loading}
+            className="
+              w-full h-[7vh] 
+              bg-blue-600 text-white 
+              rounded-[0.8vh] 
+              text-[1.3vw] font-medium 
+              hover:bg-blue-700 transition-colors
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
+          >
+            {loading ? "Criando..." : "Criar Projeto"}
+          </button>
+        </div>
+
       </form>
     </div>
   );
