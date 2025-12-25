@@ -8,12 +8,10 @@ export default function PutTaskPage({ params }) {
   const { id } = React.use(params);
   const router = useRouter();
 
-  // Estados do formulário
   const [title, setTitle] = useState("");
   const [descricao, setDescricao] = useState("");
   const [priority, setPriority] = useState("");
   
-  // Estados de controle
   const [loading, setLoading] = useState(true); 
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState({ text: "", type: "" });

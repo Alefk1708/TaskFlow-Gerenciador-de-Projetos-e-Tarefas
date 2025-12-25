@@ -12,7 +12,7 @@ load_dotenv()
 from email.mime.text import MIMEText
 from core.security import get_current_user, create_access_token, hash_password, verify_password
 from models.models import User, TwoFactorAuth
-from schemas.schema import UserCreate, UserBase, TwoFactorAuth1
+from schemas.schema import UserCreate, UserBase, TwoFactorAuth1, UserUpdate
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

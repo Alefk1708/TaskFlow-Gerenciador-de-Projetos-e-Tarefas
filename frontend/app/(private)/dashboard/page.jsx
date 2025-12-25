@@ -147,9 +147,12 @@ export default function DashboardPage() {
                 {task.title}
               </span>
             </div>
+            <div className=" flex items-center gap-[3vw]">
+              <span className={`text-[1.1vw] text-slate-700 ${task.done ? "line-through" : ""}`}>{task.descricao.substring(0, 50) + "..."}</span>
+            </div>
 
             <div className="flex items-center gap-[3vw]">
-              <span className="text-[1.1vw] text-slate-500">
+              <span className={`text-[1.1vw] text-slate-500 ${task.done ? "line-through" : ""}`}>
                 {task.date.slice(0, 10)}
               </span>
 

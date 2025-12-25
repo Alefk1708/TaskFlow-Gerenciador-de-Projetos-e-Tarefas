@@ -1,5 +1,6 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from uuid import UUID, uuid4
+from typing import Optional
 
 
 # Base sem senha
@@ -18,6 +19,11 @@ class UserCreate(BaseModel):
 # Saída (resposta da API)
 class UserOut(UserBase):
     id: UUID
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
 
 # 2FA
 class TwoFactorAuth1(BaseModel):

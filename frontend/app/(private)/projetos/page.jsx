@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trash2 } from "lucide-react"; // Importando ícone de lixeira
+import { Trash2 } from "lucide-react"; 
 
 export default function ProjetosPage() {
   const [list, setList] = useState([]);
   const router = useRouter();
 
   async function updateTask(done, id) {
-    // Atualiza tela imediatamente
+  
     setList((prevList) =>
       prevList.map((task) => (task.id === id ? { ...task, done: done } : task))
     );
@@ -71,7 +71,7 @@ export default function ProjetosPage() {
           {list.map((item) => (
             <div
               key={item.id}
-              // AÇÃO DE NAVEGAR NO CARD
+
               onClick={() => router.push(`/projetos/${item.id}`)}
               className="
                 w-[18vw] h-[25vh]
@@ -85,12 +85,12 @@ export default function ProjetosPage() {
               "
             >
               {/* TÍTULO */}
-              <h2 className="text-[1.4vw] font-semibold text-slate-700 truncate">
+              <h2 className={`text-[1.4vw] font-semibold text-slate-700 truncate ${item.done? "line-through" : ""}`}>
                 {item.title}
               </h2>
 
               {/* DESCRIÇÃO */}
-              <p className="text-[1vw] text-slate-500">
+              <p className={`text-[1vw] text-slate-500 ${item.done? "line-through" : ""}`}>
                 {item.descricao?.length > 60
                   ? item.descricao.substring(0, 60) + "..."
                   : item.descricao}

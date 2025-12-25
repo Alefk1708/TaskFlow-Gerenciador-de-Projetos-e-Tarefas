@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import routers.auth
 import routers.projects
+import routers.user
 
 Base.metadata.create_all(bind=engine)
 origins = ["*"]
@@ -23,3 +24,4 @@ def status():
 
 app.include_router(routers.auth.router)
 app.include_router(routers.projects.router)
+app.include_router(routers.user.router)
