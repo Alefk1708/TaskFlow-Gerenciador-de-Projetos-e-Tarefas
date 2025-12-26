@@ -53,49 +53,57 @@ export default function VerifyPage() {
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col justify-center items-center">
+    <div className="w-screen min-h-screen flex flex-col justify-center items-center bg-gray-50 lg:bg-white">
+      
+      {/* LOGO: Grande no mobile (50vw), normal no PC (19vw) */}
       <Image
         src="/logo.png"
         width={200}
         height={200}
         alt="Logo"
-        className="w-[19vw] m-[1vw]"
+        className="w-[50vw] m-[2vh] lg:w-[19vw] lg:m-[1vw]"
       />
 
-      <div className="w-[27vw] h-[45vh] shadow-2xl border border-slate-300 rounded-[1vw]">
+      {/* CARD: 90vw largura e 60vh altura no mobile / 27vw e 45vh no PC */}
+      <div className="w-[90vw] h-[60vh] lg:w-[27vw] lg:h-[45vh] shadow-2xl border border-slate-300 rounded-[4vw] lg:rounded-[1vw] bg-white">
         <form
           onSubmit={handleSubmit}
-          className="w-full h-full flex flex-col justify-center items-center gap-[2vh]"
+          className="w-full h-full flex flex-col justify-center items-center gap-[3vh] lg:gap-[2vh]"
         >
-          <h1 className="text-center text-[2vw]">
+          {/* TÍTULO */}
+          <h1 className="text-center text-[7vw] lg:text-[2vw] font-bold text-gray-700">
             Verifique seu email
           </h1>
 
+          {/* INPUT CÓDIGO */}
           <input
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Código de verificação"
-            className="w-[85%] h-[6vh] rounded-[0.5vw] border-[0.2vw] border-slate-300 px-[0.5vw] text-[1.2vw]"
+            className="w-[90%] lg:w-[85%] h-[8vh] lg:h-[6vh] rounded-[2vw] lg:rounded-[0.5vw] border border-slate-300 px-[3vw] lg:px-[0.5vw] text-[5vw] lg:text-[1.2vw]"
           />
 
-          <p className="text-[1vw] text-slate-500 text-center">
+          {/* TEXTO DE AJUDA */}
+          <p className="text-[3.5vw] lg:text-[1vw] text-slate-500 text-center w-[90%]">
             O código de verificação foi enviado para seu email.
           </p>
 
+          {/* BOTÃO CONFIRMAR */}
           <button
             type="submit"
             disabled={loading}
-            className={`w-[80%] h-[5vh] text-[1.2vw] text-white rounded-[0.5vw]
+            className={`w-[90%] lg:w-[80%] h-[7vh] lg:h-[5vh] text-[5vw] lg:text-[1.2vw] text-white rounded-[2vw] lg:rounded-[0.5vw] font-medium transition-colors
               ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}
             `}
           >
             {loading ? "Verificando..." : "Confirmar"}
           </button>
 
+          {/* BOTÃO REENVIAR */}
           <button
             type="button"
-            className="text-[1.1vw] text-blue-600 hover:underline"
+            className="text-[4vw] lg:text-[1.1vw] text-blue-600 hover:underline font-medium"
             onClick={() => {
               alert("Implementar reenvio de código");
             }}
@@ -103,15 +111,16 @@ export default function VerifyPage() {
             Reenviar código
           </button>
 
-          <div className="h-[3vh] text-center">
+          {/* MENSAGENS ERRO/SUCESSO */}
+          <div className="h-[3vh] text-center w-full px-[2vw]">
             {errorMessage && (
-              <p className="text-[1vw] text-red-600">
+              <p className="text-[3.5vw] lg:text-[1vw] text-red-600 font-medium">
                 {errorMessage}
               </p>
             )}
 
             {successMessage && (
-              <p className="text-[1vw] text-green-600">
+              <p className="text-[3.5vw] lg:text-[1vw] text-green-600 font-medium">
                 {successMessage}
               </p>
             )}
