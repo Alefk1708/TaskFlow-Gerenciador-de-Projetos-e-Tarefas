@@ -10,5 +10,6 @@ python-jose
 passlib
 
 email-validator
+psycopg2
 
 python-multipart
