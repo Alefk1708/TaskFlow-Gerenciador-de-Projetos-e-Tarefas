@@ -6,7 +6,13 @@ python-dotenv
 python-jose
 passlib
 email-validator
+<<<<<<< HEAD
 python-multipart
 resend
 psycopg2-binary
 sqlalchemy
+=======
+psycopg2
+
+python-multipart
+>>>>>>> 46570665a03fe0a161ce6cf6db18618fbe0c1b92
