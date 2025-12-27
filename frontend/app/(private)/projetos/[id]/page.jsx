@@ -29,7 +29,6 @@ export default function PutTaskPage({ params }) {
         const response = await fetch(`/api/task/list`); 
         const data = await response.json();
         
-        
         const currentTask = data.find((item) => item.id === id);
 
         if (currentTask) {
@@ -82,20 +81,43 @@ export default function PutTaskPage({ params }) {
     }
   }
 
-  if (loading) return <div className="p-[2vw] text-[1.2vw]">Carregando...</div>;
+  if (loading) return <div className="p-[5vw] text-[4vw] lg:p-[2vw] lg:text-[1.2vw]">Carregando...</div>;
 
   return (
-    <div className="w-full h-full flex flex-col p-[2vw]">
+    <div className="
+      w-full h-full flex flex-col 
+      /* MOBILE: Padding e espaço no rodapé */
+      p-[5vw] pb-[12vh]
+      /* PC: Valores originais */
+      lg:p-[2vw] lg:pb-[2vw]
+    ">
       
       {/* CABEÇALHO */}
-      <div className="w-full h-[8vh] flex items-center gap-[1vw] mb-[1vh]">
+      <div className="
+        w-full flex items-center 
+        /* MOBILE: Altura e gap maiores */
+        h-[8vh] gap-[3vw] mb-[2vh]
+        /* PC: Valores originais */
+        lg:h-[8vh] lg:gap-[1vw] lg:mb-[1vh]
+      ">
         <button 
           onClick={() => router.back()}
           className="text-slate-400 hover:text-slate-600 transition-colors"
         >
-          <ArrowLeft className="w-[1.8vw] h-[1.8vw]" />
+          <ArrowLeft className="
+            /* MOBILE: Ícone grande */
+            w-[8vw] h-[8vw]
+            /* PC: Ícone original */
+            lg:w-[1.8vw] lg:h-[1.8vw]
+          " />
         </button>
-        <h1 className="text-[2vw] text-slate-600 font-semibold">
+        <h1 className="
+          text-slate-600 font-semibold
+          /* MOBILE: Texto grande */
+          text-[6vw]
+          /* PC: Texto original */
+          lg:text-[2vw]
+        ">
           Editar Projeto
         </h1>
       </div>
@@ -104,46 +126,74 @@ export default function PutTaskPage({ params }) {
       <form
         onSubmit={handleUpdate}
         className="
-          w-full h-full 
-          flex flex-col gap-[1.5vh] 
-          bg-white rounded-[1vh] p-[2vw] shadow-sm
+          w-full h-full flex flex-col bg-white shadow-sm
+          /* MOBILE: Padding, gap e borda arredondada maiores */
+          gap-[2vh] rounded-[3vh] p-[5vw]
+          /* PC: Valores originais */
+          lg:gap-[1.5vh] lg:rounded-[1vh] lg:p-[2vw]
         "
       >
         {/* Título */}
         <div className="flex flex-col gap-[0.5vh]">
-          <label className="text-[1.1vw] text-slate-600 font-medium">Título do Projeto</label>
+          <label className="
+            text-slate-600 font-medium
+            /* MOBILE: Texto label legível */
+            text-[4vw]
+            /* PC: Texto original */
+            lg:text-[1.1vw]
+          ">Título do Projeto</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="
-              w-full h-[6vh] 
-              text-[1.1vw] 
-              border-[0.2vh] border-slate-300 rounded-[0.8vh] 
-              px-[1vw] outline-none focus:border-blue-500
+              w-full outline-none focus:border-blue-500 border-slate-300
+              /* MOBILE: Input alto, texto grande */
+              h-[7vh] text-[4vw] border-[0.3vh] rounded-[2vh] px-[3vw]
+              /* PC: Valores originais */
+              lg:h-[6vh] lg:text-[1.1vw] lg:border-[0.2vh] lg:rounded-[0.8vh] lg:px-[1vw]
             "
           />
         </div>
 
-        {/* Descrição (Flex-1 para ocupar espaço) */}
+        {/* Descrição */}
         <div className="flex flex-col gap-[0.5vh] flex-1">
-          <label className="text-[1.1vw] text-slate-600 font-medium">Descrição</label>
+          <label className="
+            text-slate-600 font-medium
+            /* MOBILE: Texto label legível */
+            text-[4vw]
+            /* PC: Texto original */
+            lg:text-[1.1vw]
+          ">Descrição</label>
           <textarea
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             className="
-              w-full flex-1 
-              text-[1.1vw] 
-              border-[0.2vh] border-slate-300 rounded-[0.8vh] 
-              p-[1vw] outline-none resize-none focus:border-blue-500
+              w-full flex-1 outline-none resize-none focus:border-blue-500 border-slate-300
+              /* MOBILE: Texto grande, padding maior */
+              text-[4vw] border-[0.3vh] rounded-[2vh] p-[3vw]
+              /* PC: Valores originais */
+              lg:text-[1.1vw] lg:border-[0.2vh] lg:rounded-[0.8vh] lg:p-[1vw]
             "
           />
         </div>
 
-        {/* Prioridade (Botões de Seleção Única) */}
+        {/* Prioridade */}
         <div className="flex flex-col gap-[0.5vh]">
-          <label className="text-[1.1vw] text-slate-600 font-medium">Prioridade</label>
-          <div className="flex gap-[1vw] h-[6vh]">
+          <label className="
+            text-slate-600 font-medium
+            /* MOBILE: Texto label legível */
+            text-[4vw]
+            /* PC: Texto original */
+            lg:text-[1.1vw]
+          ">Prioridade</label>
+          <div className="
+            flex w-full
+            /* MOBILE: Gap e altura maiores */
+            gap-[2vw] h-[7vh]
+            /* PC: Valores originais */
+            lg:gap-[1vw] lg:h-[6vh]
+          ">
             {priorityOptions.map((option) => {
               const isSelected = priority === option.value;
               return (
@@ -152,16 +202,27 @@ export default function PutTaskPage({ params }) {
                   type="button"
                   onClick={() => setPriority(option.value)}
                   className={`
-                    flex-1 rounded-[0.8vh] text-[1.1vw] font-semibold 
-                    flex items-center justify-center gap-[0.5vw]
-                    border-[0.2vh] transition-all
+                    flex-1 font-semibold flex items-center justify-center transition-all
+                    
+                    /* MOBILE: Arredondamento e texto maiores */
+                    rounded-[2vh] text-[3.5vw] gap-[2vw] border-[0.3vh]
+                    /* PC: Valores originais */
+                    lg:rounded-[0.8vh] lg:text-[1.1vw] lg:gap-[0.5vw] lg:border-[0.2vh]
+
                     ${isSelected 
                       ? `${option.color} border-transparent text-white shadow-md` 
                       : "bg-white border-slate-300 text-slate-500 hover:bg-slate-50"
                     }
                   `}
                 >
-                  <div className={`w-[0.8vw] h-[0.8vw] rounded-full ${isSelected ? "bg-white" : option.color}`} />
+                  <div className={`
+                    rounded-full 
+                    /* MOBILE: Bolinha maior */
+                    w-[3vw] h-[3vw]
+                    /* PC: Bolinha original */
+                    lg:w-[0.8vw] lg:h-[0.8vw]
+                    ${isSelected ? "bg-white" : option.color}
+                  `} />
                   {option.label}
                 </button>
               );
@@ -170,9 +231,21 @@ export default function PutTaskPage({ params }) {
         </div>
 
         {/* Feedback e Botão Salvar */}
-        <div className="flex flex-col items-center gap-[1vh] mt-[1vh]">
+        <div className="
+          flex flex-col items-center 
+          /* MOBILE: Margin top maior */
+          gap-[1vh] mt-[2vh]
+          /* PC: Original */
+          lg:mt-[1vh]
+        ">
           {msg.text && (
-            <p className={`text-[1vw] ${msg.type === "error" ? "text-red-600" : "text-green-600"}`}>
+            <p className={`
+              /* MOBILE: Texto msg maior */
+              text-[3.5vw]
+              /* PC: Texto original */
+              lg:text-[1vw]
+              ${msg.type === "error" ? "text-red-600" : "text-green-600"}
+            `}>
               {msg.text}
             </p>
           )}
@@ -181,11 +254,11 @@ export default function PutTaskPage({ params }) {
             type="submit"
             disabled={saving}
             className="
-              w-full h-[7vh] 
-              bg-blue-600 text-white rounded-[0.8vh] 
-              text-[1.3vw] font-medium 
-              hover:bg-blue-700 transition-colors
-              disabled:opacity-50
+              w-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50
+              /* MOBILE: Botão alto, texto grande */
+              h-[8vh] rounded-[2vh] text-[5vw]
+              /* PC: Valores originais */
+              lg:h-[7vh] lg:rounded-[0.8vh] lg:text-[1.3vw]
             "
           >
             {saving ? "Salvando..." : "Salvar Alterações"}

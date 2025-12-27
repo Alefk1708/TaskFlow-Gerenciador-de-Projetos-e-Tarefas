@@ -33,7 +33,16 @@ export default function RootLayout({ children }) {
         <TopBar />
 
         {/* Main area (Sidebar + Content) */}
-        <div className="flex w-[100vw] h-[90vh]">
+        <div className="
+          flex 
+          w-[100vw] h-[90vh]
+          
+          /* MOBILE: Coluna (embora a sidebar seja fixed, isso organiza o fluxo) */
+          flex-col 
+          
+          /* PC: Linha (Sidebar na esquerda, conteúdo na direita) */
+          lg:flex-row
+        ">
           
           {/* Sidebar */}
           <SideBar />
@@ -41,10 +50,15 @@ export default function RootLayout({ children }) {
           {/* Content */}
           <main
             className="
-              w-[82vw] h-[90vh]
               bg-white
               overflow-y-auto
+              h-full
               
+              /* MOBILE: Ocupa a largura toda (já que a sidebar tá embaixo) */
+              w-full
+              
+              /* PC: Mantém sua medida exata de 82vw */
+              lg:w-[82vw]
             "
           >
             {children}

@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db
 
-from core.security import get_current_user, hash_password
-from models.models import User
-from schemas.schema import UserUpdate
+from app.database import get_db
+from app.core.security import get_current_user, hash_password
+from app.models.models import User
+from app.schemas.schema import UserUpdate
 
 router = APIRouter(prefix="/user", tags=["user"])
+
 
 @router.put("/update")
 def user_update(
     payload: UserUpdate,
     user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
-    
     user_db = db.query(User).filter(User.id == user.id).first()
 
     if not user_db:
@@ -24,10 +24,11 @@ def user_update(
         user_db.name = payload.name
 
     if payload.email:
-        email_exists = db.query(User).filter(
-            User.email == payload.email,
-            User.id != user.id
-        ).first()
+        email_exists = (
+            db.query(User)
+            .filter(User.email == payload.email, User.id != user.id)
+            .first()
+        )
 
         if email_exists:
             raise HTTPException(status_code=400, detail="E-mail já está em uso")
@@ -45,14 +46,15 @@ def user_update(
         "data": {
             "id": user_db.id,
             "name": user_db.name,
-            "email": user_db.email
-        }
+            "email": user_db.email,
+        },
     }
+
 
 @router.delete("/delete")
 def user_delete(
     user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     user_db = db.query(User).filter(User.id == user.id).first()
 
