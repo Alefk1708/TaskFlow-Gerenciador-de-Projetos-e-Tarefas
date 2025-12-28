@@ -1,15 +1,11 @@
 fastapi
 uvicorn
-
 sqlalchemy
-
 pydantic
 python-dotenv
-
 python-jose
 passlib
-
 email-validator
 psycopg2
-
+resend
 python-multipart
