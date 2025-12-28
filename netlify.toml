@@ -1,0 +1,13 @@
+[build]
+  # Entra na pasta do frontend antes de rodar os comandos
+  base = "frontend"
+  
+  # Comando de build do Next.js
+  command = "npm run build"
+  
+  # Pasta onde o Next gera os arquivos (o plugin vai ler isto)
+  publish = ".next"
+
+# Força o uso do Plugin do Next.js para criar as rotas de servidor/API
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

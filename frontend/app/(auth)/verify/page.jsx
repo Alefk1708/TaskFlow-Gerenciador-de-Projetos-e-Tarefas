@@ -12,6 +12,32 @@ export default function VerifyPage() {
 
   const router = useRouter();
 
+  const handleResend = async () => {
+    try {
+      setLoading(true)
+
+      const res = await fetch("/api/auth/resend-code", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMessage(data.message);
+        setSuccessMessage("");
+        setLoading(false);
+        return;
+      } else {
+        setSuccessMessage("Código de verificação reenviado com sucesso");
+        setErrorMessage("");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -104,9 +130,7 @@ export default function VerifyPage() {
           <button
             type="button"
             className="text-[4vw] lg:text-[1.1vw] text-blue-600 hover:underline font-medium"
-            onClick={() => {
-              alert("Implementar reenvio de código");
-            }}
+            onClick={handleResend}
           >
             Reenviar código
           </button>

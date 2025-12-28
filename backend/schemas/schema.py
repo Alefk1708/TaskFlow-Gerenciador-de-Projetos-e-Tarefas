@@ -5,14 +5,14 @@ from typing import Optional
 
 # Base sem senha
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
     model_config = ConfigDict(from_attributes=True)
 
 # Entrada (criação)
 class UserCreate(BaseModel):
-    email: str
+    email: EmailStr
     name: str
     password: str
 
@@ -27,5 +27,11 @@ class UserUpdate(BaseModel):
 
 # 2FA
 class TwoFactorAuth1(BaseModel):
-    email: str
+    email: EmailStr
     code: str
+
+class ResendCode(BaseModel):
+    email: EmailStr
+
+class ForgotPassword(BaseModel):
+    email: EmailStr

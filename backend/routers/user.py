@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 
 from core.security import get_current_user, hash_password
-from models.models import User
+from models.models import User, Tarefa
 from schemas.schema import UserUpdate
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -58,7 +58,8 @@ def user_delete(
 
     if not user_db:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
-
+    
+    db.query(Tarefa).filter(Tarefa.user_id == user.id).delete()
     db.delete(user_db)
     db.commit()
 

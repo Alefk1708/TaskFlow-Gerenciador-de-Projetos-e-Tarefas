@@ -33,3 +33,12 @@ class Tarefa(Base):
     priority = Column(String, nullable=False)
     done = Column(Boolean, default=False, nullable=False)
     date = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+class PasswordReset(Base):
+    __tablename__ = "password_resets"
+
+    id = Column(String, primary_key=True, defalt=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    token_hash = Column(String, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    used = Column(Boolean, default=False)

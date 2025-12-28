@@ -40,7 +40,7 @@ export async function POST(request) {
 
     if (!res.ok) {
       return NextResponse.json(
-        { message: data?.message || "Falha na verificação" },
+        { message: data?.message || "Tempo de verificação expirado, faça login novamente" },
         { status: res.status }
       )
     }

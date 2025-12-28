@@ -137,9 +137,17 @@ export default function PerfilPage() {
           Meu Perfil
         </h1>
 
-        {/* Botão de Logout */}
+        {/* Botão de Deletar usuario */}
         <button
-          onClick={() => userDelete()}
+          onClick={() => {
+            if(confirm("Tem certeza que deseja deletar sua conta?")) {
+              userDelete()
+            } else {
+              return
+            }
+            
+            
+          }}
           className="
             flex items-center text-red-500 hover:text-red-700 font-medium transition-colors
             /* MOBILE: Gap e texto maiores */

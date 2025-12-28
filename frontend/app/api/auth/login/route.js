@@ -41,7 +41,7 @@ export async function POST(request) {
             { status: 200 }
         )
 
-        response.cookies.set("tokenVerify", tokenVerify, {
+        response.cookies.set("tokenVerify", `Bearer ${tokenVerify}`, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "lax",

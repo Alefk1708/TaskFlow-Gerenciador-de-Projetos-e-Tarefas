@@ -6,7 +6,7 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl
   const cookiesStore = await cookies()
 
-  const PUBLIC_ROUTES = ["/login", "/register"]
+  const PUBLIC_ROUTES = ["/login", "/register", "/recuperar"]
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
 
   const token = request.cookies.get("token")?.value
