@@ -22,15 +22,25 @@ export default function RecuperarSenha() {
       setLoading(true)
       setMessage({ text: "", type: "" })
 
-      // SIMULAÇÃO DO BACKEND
-      // Aqui você colocará o fetch("/api/auth/recover"...) futuramente
-      console.log("Enviando email para:", email)
-      
-      // Delay artificial para simular a requisição
+      const res = await fetch("/api/auth/recover", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setMessage({ text: data.message, type: "error" })
+        throw new Error(data.message)
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       setMessage({ 
-        text: "E-mail de recuperação enviado! Verifique sua caixa de entrada.", 
+        text: "E-mail de recuperação enviado!", 
         type: "success" 
       })
       setEmail("") // Limpa o campo após sucesso

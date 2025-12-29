@@ -255,7 +255,6 @@ def forgot_password(payload: ForgotPassword, db: Session = Depends(get_db)):
     db.commit()
 
     token, token_hash = generate_reset_token()
-    print(token)
 
     reset = PasswordReset(
         id=str(uuid4()),
