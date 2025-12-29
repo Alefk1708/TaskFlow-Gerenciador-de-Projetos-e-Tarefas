@@ -11,3 +11,9 @@
 # Força o uso do Plugin do Next.js para criar as rotas de servidor/API
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://vast-amelie-lumos-desenvolvimento-web-9669a4b5.koyeb.app/:splat"
+  status = 200
+  force = true
