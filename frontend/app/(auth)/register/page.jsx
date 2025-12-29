@@ -15,21 +15,49 @@ export default function RegisterPage() {
   const [successMessage, setSuccessMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // --- FUNÇÃO DE VALIDAÇÃO DE SENHA ---
+  const validatePasswordRules = (pwd) => {
+    if (pwd.length < 8) {
+      return "A senha deve ter no mínimo 8 caracteres."
+    }
+    if (!/[A-Z]/.test(pwd)) {
+      return "A senha deve conter pelo menos uma letra maiúscula."
+    }
+    if (!/[a-z]/.test(pwd)) {
+      return "A senha deve conter pelo menos uma letra minúscula."
+    }
+    // Verifica caracteres especiais
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)) {
+      return "A senha deve conter pelo menos um caractere especial."
+    }
+    return null
+  }
+
   const handleSubmit = async () => {
+    setErrorMessage("")
+    setSuccessMessage("")
+
+    // 1. Verifica campos vazios
     if (!name || !email || !password || !passwordConfirm) {
       setErrorMessage("Preencha todos os campos.")
       return
     }
 
+    // 2. Verifica se senhas conferem
     if (password !== passwordConfirm) {
       setErrorMessage("As senhas não conferem.")
       return
     }
 
+    // 3. Valida força da senha (Nova lógica)
+    const passwordError = validatePasswordRules(password)
+    if (passwordError) {
+      setErrorMessage(passwordError)
+      return
+    }
+
     try {
       setLoading(true)
-      setErrorMessage("")
-      setSuccessMessage("")
 
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -63,7 +91,7 @@ export default function RegisterPage() {
   return (
     <div className="w-screen min-h-screen flex flex-col justify-center items-center bg-gray-50 lg:bg-white">
       
-      {/* LOGO: 50vw no celular / 19vw no PC */}
+      {/* LOGO */}
       <Image
         src="/logo.png"
         width={200}
@@ -77,13 +105,18 @@ export default function RegisterPage() {
           e.preventDefault()
           handleSubmit()
         }}
-        // CARD: 90vw largura e 80vh altura no celular / 27vw e 67vh no PC
+        // CARD
         className="w-[90vw] h-[80vh] lg:w-[27vw] lg:h-[67vh] shadow-2xl border border-slate-300 rounded-[4vw] lg:rounded-[1vw] flex flex-col justify-center items-center gap-[2.5vh] lg:gap-[2vh] bg-white"
       >
-        {/* TÍTULO: Grande no celular */}
-        <h1 className="text-center text-[8vw] lg:text-[2vw] mb-[1vh] lg:mb-[2vh] mt-[2vh] lg:mt-[4vh] font-bold text-gray-700">
+        {/* TÍTULO */}
+        <h1 className="text-center text-[8vw] lg:text-[2vw] mt-[2vh] lg:mt-[4vh] font-bold text-gray-700">
           Criar conta
         </h1>
+        
+        {/* INSTRUÇÃO DE SENHA (Adicionado para UX) */}
+        <p className="w-[85%] text-center text-gray-400 text-[3vw] lg:text-[0.8vw] -mt-2 mb-2 leading-tight">
+          Senha forte: 8 dígitos, maiúscula, minúscula e especial.
+        </p>
 
         {/* INPUT NOME */}
         <input
@@ -118,7 +151,11 @@ export default function RegisterPage() {
           value={passwordConfirm}
           onChange={(e) => setPasswordConfirm(e.target.value)}
           placeholder="Confirmar senha"
-          className="w-[90%] lg:w-[85%] h-[7vh] lg:h-[6vh] text-[4.5vw] lg:text-[1.2vw] rounded-[2vw] lg:rounded-[0.5vw] border border-slate-300 px-[3vw] lg:px-[0.5vw]"
+          className={`w-[90%] lg:w-[85%] h-[7vh] lg:h-[6vh] text-[4.5vw] lg:text-[1.2vw] rounded-[2vw] lg:rounded-[0.5vw] border px-[3vw] lg:px-[0.5vw] ${
+            passwordConfirm && password !== passwordConfirm 
+              ? "border-red-500 focus:outline-red-500" 
+              : "border-slate-300"
+          }`}
         />
 
         {/* BOTÃO */}
@@ -139,12 +176,12 @@ export default function RegisterPage() {
         </div>
 
         {/* MENSAGENS ERRO/SUCESSO */}
-        <div className="w-full h-[3vh] text-center">
+        <div className="w-full h-[3vh] text-center px-4">
           {errorMessage && (
-            <p className="text-[3.5vw] lg:text-[1vw] text-red-600 font-medium">{errorMessage}</p>
+            <p className="text-[3vw] lg:text-[0.9vw] text-red-600 font-medium truncate">{errorMessage}</p>
           )}
           {successMessage && (
-            <p className="text-[3.5vw] lg:text-[1vw] text-green-600 font-medium">{successMessage}</p>
+            <p className="text-[3vw] lg:text-[0.9vw] text-green-600 font-medium truncate">{successMessage}</p>
           )}
         </div>
       </form>

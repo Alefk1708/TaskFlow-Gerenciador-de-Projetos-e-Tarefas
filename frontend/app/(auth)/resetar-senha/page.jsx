@@ -25,17 +25,49 @@ function ResetPasswordForm() {
     }
   }, [searchParams])
 
+  // --- FUNÇÃO DE VALIDAÇÃO DE SEGURANÇA ---
+  const validatePasswordRules = (pwd) => {
+    if (pwd.length < 8) {
+      return "A senha deve ter no mínimo 8 caracteres."
+    }
+    if (!/[A-Z]/.test(pwd)) {
+      return "A senha deve conter pelo menos uma letra maiúscula."
+    }
+    if (!/[a-z]/.test(pwd)) {
+      return "A senha deve conter pelo menos uma letra minúscula."
+    }
+    // Verifica caracteres especiais
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd)) {
+      return "A senha deve conter pelo menos um caractere especial."
+    }
+    return null
+  }
+
   const handleSubmit = async () => {
+    // Limpa mensagens anteriores
+    setErrorMessage("")
+    setSuccessMessage("")
+
+    // 1. Verifica campos vazios
     if (!new_password || !confirmPassword) {
       setErrorMessage("Preencha ambos os campos de senha.")
       return
     }
 
+    // 2. Verifica igualdade
     if (new_password !== confirmPassword) {
       setErrorMessage("As senhas não coincidem.")
       return
     }
 
+    // 3. Verifica REGRAS DE SEGURANÇA (Adicionado)
+    const strengthError = validatePasswordRules(new_password)
+    if (strengthError) {
+      setErrorMessage(strengthError)
+      return
+    }
+
+    // 4. Verifica token
     if (!token) {
       setErrorMessage("Token de verificação ausente.")
       return
@@ -43,8 +75,6 @@ function ResetPasswordForm() {
 
     try {
       setLoading(true)
-      setErrorMessage("")
-      setSuccessMessage("")
 
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
@@ -88,8 +118,9 @@ function ResetPasswordForm() {
           Nova Senha
         </h1>
         
-        <p className="text-gray-500 text-[3.5vw] lg:text-[0.9vw] mb-2 text-center w-[80%]">
-          Digite sua nova senha abaixo.
+        {/* Texto de instrução atualizado para ajudar o usuário */}
+        <p className="text-gray-400 text-[3vw] lg:text-[0.8vw] mb-2 text-center w-[85%] leading-tight">
+          Mín. 8 caracteres, com maiúscula, minúscula e especial.
         </p>
 
         <input
@@ -126,14 +157,14 @@ function ResetPasswordForm() {
           </a>
         </div>
 
-        <div className="w-full h-[3vh] text-center">
+        <div className="w-full h-[3vh] text-center px-4">
           {errorMessage && (
-            <p className="text-[3.5vw] lg:text-[1vw] text-red-600 font-medium px-4 truncate">
+            <p className="text-[3vw] lg:text-[0.9vw] text-red-600 font-medium truncate">
               {errorMessage}
             </p>
           )}
           {successMessage && (
-            <p className="text-[3.5vw] lg:text-[1vw] text-green-600 font-medium px-4 truncate">
+            <p className="text-[3vw] lg:text-[0.9vw] text-green-600 font-medium truncate">
               {successMessage}
             </p>
           )}
@@ -154,7 +185,6 @@ export default function ResetarSenhaPage() {
         className="w-[50vw] m-[2vh] lg:w-[19vw] lg:m-[1vw]"
       />
 
-      {/* O Suspense é obrigatório para componentes que usam useSearchParams no Next.js App Router */}
       <Suspense fallback={<div className="text-gray-500">Carregando formulário...</div>}>
         <ResetPasswordForm />
       </Suspense>
