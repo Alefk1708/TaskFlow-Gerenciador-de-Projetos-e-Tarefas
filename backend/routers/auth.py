@@ -266,7 +266,7 @@ def forgot_password(payload: ForgotPassword, db: Session = Depends(get_db)):
     db.add(reset)
     db.commit()
 
-    reset_link = f"https://taskflow1708.netlify.app/reset-password?token={token}"
+    reset_link = f"https://taskflow1708.netlify.app/resetar-senha?token={token}"
 
     seed_email_reset(
         user.email,
